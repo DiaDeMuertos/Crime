@@ -3,3 +3,4 @@ csv-files
 shape-files
 venv
 __pycache__
+.ipynb_checkpoints
