@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
-from os import path, environ
+from os import path, environ, chdir
+from toolz import itertoolz
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -27,10 +28,17 @@ def predict(hour, day_of_week, month, tract_id, grid_id):
 
 
 if __name__ == '__main__':
-    if path.exists(path.join(path.dirname(__file__), 'csv-files')):
-        df = pd.read_csv('../csv-files/crimes.csv')
+
+    base_path = path.dirname(path.abspath(__file__))
+    path_one_step_back = itertoolz.first(path.split(base_path))
+    path_two_step_back = itertoolz.first(path.split(path_one_step_back))
+
+    crimes_dir_exists = path.exists(path.join(path_one_step_back, 'csv-files'))
+
+    if crimes_dir_exists:
+        df = pd.read_csv(path.join(path_one_step_back, 'csv-files','crimes.csv'))
     else:
-        df = pd.read_csv('../../csv-files/crimes.csv')
+        df = pd.read_csv(path.join(path_two_step_back, 'csv-files','crimes.csv'))
 
     group_ids = [57, 20, 41, 34, 36, 19, 42]
     columns_to_drop = ['id', 'offense_code', 'offense_group', 'longitude', 'latitude', 'year']
