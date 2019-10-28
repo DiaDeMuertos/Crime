@@ -22,9 +22,9 @@ def predict(hour, day_of_week, month, tract_id, grid_id):
         try:
             prediction = int(model.predict([[hour, day_of_week, month, tract_id, grid_id]])[0])
             payload = { "group_id" : prediction }
-            return jsonify({"payload": payload, "status": True})
+            return jsonify({"payload": payload, "success": True}), 200
         except:
-            return jsonify({"payload": None, "status": False})
+            return jsonify({"payload": None, "success": False}), 400
 
 
 if __name__ == '__main__':
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=9)
 
-    model = RandomForestClassifier(n_estimators=250)
+    model = RandomForestClassifier(n_estimators=10)
     model.fit(X_train, y_train)
 
     app.run(host='0.0.0.0', port=FLASK_PORT)
