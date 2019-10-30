@@ -7,6 +7,7 @@ services:
     ports:
       - 3000:3000
     volumes:
+      - ./csv-files:/back-end/csv-files
       - ./back-end/src:/back-end/src
     command: ['python3', 'src/main.py']
   db:
