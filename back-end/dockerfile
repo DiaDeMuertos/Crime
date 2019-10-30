@@ -14,14 +14,6 @@ RUN add-apt-repository ppa:jonathonf/python-3.6
 RUN apt-get update
 RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv
 
-RUN apt-get update
-RUN apt-get install -y wget
-RUN apt-get install -y unzip
-
-RUN wget -O csv-files.zip --no-check-certificate "https://onedrive.live.com/download?cid=8FD49A24D2F6BA30&resid=8FD49A24D2F6BA30%21107877&authkey=AL7O6ap4Zmm3294"
-RUN unzip csv-files.zip
-RUN rm *.zip
-
 RUN pip3 install --upgrade pip
 RUN pip3 install -r src/requirements.txt
 
