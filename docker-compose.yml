@@ -9,6 +9,9 @@ services:
     volumes:
       - ./csv-files:/back-end/csv-files
       - ./back-end/src:/back-end/src
+    depends_on:
+      db:
+        condition: service_healthy
     command: ['python3', 'src/main.py']
   db:
     image: mdillon/postgis
