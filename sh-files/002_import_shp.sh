@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if psql -U postgres "$POSTGRES_DB" -c "SELECT id FROM crimes"; then
+if psql -U postgres "$POSTGRES_DB" -c "SELECT id FROM crimes LIMIT 1"; then
     echo "They exists"
 else
     echo "Importing shps"
