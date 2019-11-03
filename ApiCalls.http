@@ -1,9 +1,12 @@
 ### GET CRIMES PREDICT
-GET http://localhost:3000/api/crimes/predict/5/4/10/53/42
+GET http://localhost:3001/api/crimes/predict/5/4/10/42
 
 ### GET CRIMES BY
-GET http://localhost:3000/api/crimes/by/20/5/4/10/53/42
+GET http://localhost:3001/api/crimes/by/20/5/4/10/42
 
 ### GET GRID
-GET http://localhost:3000/api/grid
+GET http://localhost:3001/api/grid
+
+### GET CRIMES SAMPLE
+GET http://localhost:3001/api/crimes/sample
 
