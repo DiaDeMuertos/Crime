@@ -12,7 +12,7 @@ import './Map.css';
 
 const { Overlay } = LayersControl;
 const BOSTON_CENTROID = [42.31255208, -71.0778522184999];
-const zoom = 11;
+const zoom = 12;
 
 class Map extends Component {
   handleGeojsonOnClick = (feature, layer) =>
