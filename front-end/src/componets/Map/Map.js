@@ -23,7 +23,7 @@ class Map extends Component {
     });
 
   render() {
-    const { grid, crimesSample } = this.props;
+    const { grid, crimesSample, crimesBy } = this.props;
 
     return (
       <LeafletMap
@@ -38,7 +38,7 @@ class Map extends Component {
         easeLinearity={0.35}
       >
         <LayersControl position="topright">
-          <Overlay name="Centroide" checked>
+          <Overlay name="Centroide">
             <Marker position={BOSTON_CENTROID}>
               <Popup>Centroide</Popup>
             </Marker>
@@ -68,12 +68,16 @@ class Map extends Component {
             <FeatureGroup>
               {crimesSample &&
                 crimesSample.map(p => (
-                  <GeoJSON
-                    id={p.id}
-                    key={p.id}
-                    data={p.geojson}
-                    onEachFeature={this.handleGeojsonOnClick}
-                  />
+                  <GeoJSON id={p.id} key={p.id} data={p.geojson} />
+                ))}
+            </FeatureGroup>
+          </Overlay>
+
+          <Overlay name="Crimes Similares" checked>
+            <FeatureGroup>
+              {crimesBy &&
+                crimesBy.map(p => (
+                  <GeoJSON id={p.id} key={p.id} data={p.geojson} />
                 ))}
             </FeatureGroup>
           </Overlay>

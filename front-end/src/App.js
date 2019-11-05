@@ -6,8 +6,18 @@ import Map from './componets/Map';
 import Header from './componets/Header';
 import './App.css';
 
+const CATALOG = {
+  36: 'residential burglary',
+  34: 'violations',
+  20: 'simple assault',
+  19: 'auto theft',
+  41: 'aggravated assault',
+  57: 'larceny',
+  42: 'robbery',
+};
+
 class App extends Component {
-  state = { grid: null, fetching: false, crimesSample: null };
+  state = { fetching: false };
 
   handlerGetInputsOnClick = gridId => {
     const date = moment();
@@ -36,20 +46,34 @@ class App extends Component {
         }
       });
 
-  handlePredictionOnClick = async() => {
+  handlePredictionOnClick = async () => {
     const { hour, day, month, gridId } = this.state;
 
-    const urlCrimesPredict = `http://localhost:3001/api/crimes/predict/${hour}/${day}/${month}/${gridId}`;
+    try {
+      this.setState({ fetching: true, crimesBy: null, offenseGroup: null });
 
-    const crimesPredict = await this.handleGetCall(urlCrimesPredict);
+      const urlCrimesPredict = `http://localhost:3000/api/crimes/predict/${hour}/${day}/${month}/${gridId}`;
+      const { group_id } = await this.handleGetCall(urlCrimesPredict);
 
-    console.log(crimesPredict)
+      const urlCrimesBy = `http://localhost:3000/api/crimes/by/${group_id}/${hour}/${day}/${month}/${gridId}`;
+      const crimesBy = await this.handleGetCall(urlCrimesBy);
+      const offenseGroup = CATALOG[group_id];
 
+      this.setState(state => ({
+        crimesBy,
+        offenseGroup,
+        headerText: `${state.headerText} - ${offenseGroup}`,
+        fetching: false,
+      }));
+    } catch (error) {
+      console.error(error);
+      this.setState({ crimesBy: null, offenseGroup: null, fetching: false });
+    }
   };
 
   async componentDidMount() {
-    const urlGrid = 'http://localhost:3001/api/grid';
-    const urlCrimesSample = 'http://localhost:3001/api/crimes/sample';
+    const urlGrid = 'http://localhost:3000/api/grid';
+    const urlCrimesSample = 'http://localhost:3000/api/crimes/sample';
 
     try {
       this.setState({ fetching: true, headerText: null });
@@ -65,7 +89,15 @@ class App extends Component {
   }
 
   render() {
-    const { fetching, grid, headerText, crimesSample, gridId } = this.state;
+    const {
+      fetching,
+      grid,
+      headerText,
+      crimesSample,
+      gridId,
+      crimesBy,
+      offenseGroup,
+    } = this.state;
     const appMapContainerStyle = `App-map-container ${
       fetching ? 'App-map-container-loader' : null
     }`;
@@ -85,12 +117,15 @@ class App extends Component {
             <Map
               grid={grid}
               crimesSample={crimesSample}
+              crimesBy={crimesBy}
               handlerGetInputsOnClick={this.handlerGetInputsOnClick}
             />
           )}
         </div>
         <p>
-          <button onClick={this.handlePredictionOnClick} disabled={!gridId}>PREDICTION</button>
+          <button onClick={this.handlePredictionOnClick} disabled={!gridId}>
+            PREDICTION
+          </button>
         </p>
       </div>
     );
