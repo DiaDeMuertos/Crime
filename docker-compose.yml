@@ -13,6 +13,18 @@ services:
       db:
         condition: service_healthy
     command: ['python3', 'src/main.py']
+  front:
+    build: front-end/.
+    image: crime-front-end
+    container_name: crime-front-end
+    ports:
+      - '3001:3000'
+    volumes:
+      - ./front-end/src:/front-end/src
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ['npm', 'start']
   db:
     image: mdillon/postgis
     container_name: crime-db
