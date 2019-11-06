@@ -5,7 +5,7 @@ services:
     image: crime-back-end
     container_name: crime-back-end
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - ./csv-files:/back-end/csv-files
       - ./back-end/src:/back-end/src
@@ -18,7 +18,7 @@ services:
     image: crime-front-end
     container_name: crime-front-end
     ports:
-      - '3001:3000'
+      - '3002:3000'
     volumes:
       - ./front-end/src:/front-end/src
     depends_on:

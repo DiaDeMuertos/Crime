@@ -16,6 +16,8 @@ const CATALOG = {
   42: 'robbery',
 };
 
+const URL_BASE = 'http://back:3001';
+
 class App extends Component {
   state = { fetching: false };
 
@@ -52,10 +54,10 @@ class App extends Component {
     try {
       this.setState({ fetching: true, crimesBy: null, offenseGroup: null });
 
-      const urlCrimesPredict = `http://localhost:3000/api/crimes/predict/${hour}/${day}/${month}/${gridId}`;
+      const urlCrimesPredict = `${URL_BASE}/api/crimes/predict/${hour}/${day}/${month}/${gridId}`;
       const { group_id } = await this.handleGetCall(urlCrimesPredict);
 
-      const urlCrimesBy = `http://localhost:3000/api/crimes/by/${group_id}/${hour}/${day}/${month}/${gridId}`;
+      const urlCrimesBy = `${URL_BASE}/api/crimes/by/${group_id}/${hour}/${day}/${month}/${gridId}`;
       const crimesBy = await this.handleGetCall(urlCrimesBy);
       const offenseGroup = CATALOG[group_id];
 
@@ -72,8 +74,8 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    const urlGrid = 'http://localhost:3000/api/grid';
-    const urlCrimesSample = 'http://localhost:3000/api/crimes/sample';
+    const urlGrid = `${URL_BASE}/api/grid`;
+    const urlCrimesSample = `${URL_BASE}/api/crimes/sample`;
 
     try {
       this.setState({ fetching: true, headerText: null });
@@ -96,7 +98,6 @@ class App extends Component {
       crimesSample,
       gridId,
       crimesBy,
-      offenseGroup,
     } = this.state;
     const appMapContainerStyle = `App-map-container ${
       fetching ? 'App-map-container-loader' : null
