@@ -16,7 +16,7 @@ const CATALOG = {
   42: 'robbery',
 };
 
-const URL_BASE = 'http://localhost:3001';
+const URL_BASE = 'http://localhost';
 
 class App extends Component {
   state = { fetching: false };
