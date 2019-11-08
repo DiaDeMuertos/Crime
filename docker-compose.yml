@@ -4,8 +4,10 @@ services:
     build: back-end/.
     image: crime-back-end
     container_name: crime-back-end
-    ports:
-      - 3001:3000
+    # ports:
+    #   - 3001:3000
+    expose:
+      - 3000
     volumes:
       - ./csv-files:/back-end/csv-files
       - ./back-end/src:/back-end/src
@@ -17,8 +19,10 @@ services:
     build: front-end/.
     image: crime-front-end
     container_name: crime-front-end
-    ports:
-      - '3002:3000'
+    # ports:
+    #   - 3000:3000
+    expose:
+      - 3000
     volumes:
       - ./front-end/src:/front-end/src
     depends_on:
@@ -28,9 +32,10 @@ services:
   db:
     image: mdillon/postgis
     container_name: crime-db
-    hostname: crime-db-hostname
-    ports:
-      - '5434:5432'
+    # ports:
+    #   - 5434:5432
+    expose: 
+      - 5432
     volumes:
       - ./shape-files:/shape-files
       - ./sh-files:/docker-entrypoint-initdb.d
@@ -43,3 +48,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  nginx:
+    image: nginx:alpine
+    container_name: crime-nginx
+    tty: true
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - front
+      - back
+      - db
